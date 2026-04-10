@@ -11,7 +11,7 @@ import kotlinx.coroutines.launch
 
 class CountdownViewModel : ViewModel() {
 
-    private val _timeLeft = MutableStateFlow(45 * 60) // 30 minutos em segundos
+    private val _timeLeft = MutableStateFlow(45 * 60)
     val timeLeft: StateFlow<Int> = _timeLeft
 
     fun startCountdown() {
@@ -24,14 +24,22 @@ class CountdownViewModel : ViewModel() {
     }
 
     fun pause() {
-        viewModelScope.coroutineContext.cancelChildren() // Para a contagem
+        viewModelScope.coroutineContext.cancelChildren()
     }
 
     fun resume() {
-        startCountdown() // Retoma a contagem
+        startCountdown()
     }
 
     fun reset(seconds: Int = 45 * 60) {
         _timeLeft.value = seconds
+    }
+
+    fun setTime(value: String) {
+        val parts = value.split(":").mapNotNull { it.toIntOrNull() }
+        if (parts.size == 3) {
+            val totalSeconds = parts[0] * 3600 + parts[1] * 60 + parts[2]
+            _timeLeft.value = totalSeconds
+        }
     }
 }

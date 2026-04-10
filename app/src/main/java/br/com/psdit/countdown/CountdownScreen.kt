@@ -4,14 +4,13 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Button
 import androidx.compose.material3.Scaffold
-import androidx.compose.material3.ScaffoldDefaults
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
@@ -19,10 +18,11 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewScreenSizes
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.em
 import androidx.lifecycle.viewmodel.compose.viewModel
+import br.com.psdit.countdown.extensions.clearFocusOnKeyboardDismiss
 import br.com.psdit.countdown.ui.theme.CountDownTheme
 import br.com.psdit.countdown.ui.theme.Purple80
 
@@ -63,14 +63,25 @@ fun CountdownScreen(viewModel: CountdownViewModel = viewModel()) {
                 .background(Purple80),
             contentAlignment = Alignment.Center
         ) {
-            DigitalTimer(text = formattedTime)
+            DigitalTimer(text = formattedTime, 50.em)
+
+            TextField(
+                value = formattedTime,
+                onValueChange = {
+                    viewModel.setTime(it)
+                },
+                modifier = Modifier
+                    .align(Alignment.TopCenter)
+                    .padding(top = 16.dp)
+                    .clearFocusOnKeyboardDismiss(),
+                enabled = true
+            )
 
             Row(
                 modifier = Modifier
                     .fillMaxSize(),
                 horizontalArrangement = Arrangement
-                    .spacedBy(10.dp, Alignment.CenterHorizontally)
-                ,
+                    .spacedBy(10.dp, Alignment.CenterHorizontally),
                 verticalAlignment = Alignment.Bottom
             ) {
                 Button(
